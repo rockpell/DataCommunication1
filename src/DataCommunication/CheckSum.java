@@ -1,8 +1,7 @@
 package DataCommunication;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 // https://kutar37.tistory.com/29
 // http://kylog.tistory.com/6
@@ -13,7 +12,7 @@ import java.util.List;
 public class CheckSum {
     public static void main(String[] args){
 
-        List<Integer> bitList = new ArrayList<Integer>();
+        LinkedList<Integer> bitList = new LinkedList<Integer>();
         CheckSum checkSum = new CheckSum();
 
         try{
@@ -25,9 +24,9 @@ public class CheckSum {
 
             _line = bufferedReader.readLine();
 
-            char[] charArray = _line.toCharArray();
+            char[] _charArray = _line.toCharArray();
 
-            checkSum.InputBitsToList(bitList, charArray);
+            checkSum.InputBitsToList(bitList, _charArray);
 
             for (int i : bitList) {
                 System.out.println(i);
@@ -49,37 +48,34 @@ public class CheckSum {
         }
     }
 
-    private int CountOneBit(int value){ // count 1 bit
-        int i;
-        for(i = 0; value != 0; i++){
-            value &= (value - 1);
-        }
-        return i;
-    }
-
-    private int Change8Bit(int value){ // Add parity bytes to 7 bits
-        int _result;
-        _result  = value << 1;
-
-        if(CountOneBit(value) % 2 != 0){
-            _result += 1;
-        }
-        return _result;
-    }
-
-    private int MergeTo16Bit(int value1, int value2){ // merge two 8bit
-        int _result = 0;
-        _result = (value1 << 8) + value2;
-        return _result;
-    }
-
-    public void InputBitsToList(List<Integer> list, char[] chars){ // input the bits in ther list
+    public void InputBitsToList(LinkedList<Integer> list, char[] chars){ // input the bits in ther list
         for(int i = 0; i < chars.length; i += 2){
             list.add(MergeTo16Bit(Change8Bit((int)chars[i]), Change8Bit((int)chars[i + 1])) );
         }
     }
 
-    private int SumBits(List<Integer> list){ // sum the bits in the list
+    public int CalculateCheckSum(LinkedList<Integer> list){
+        return ComplementOne(SumBits(list));
+    }
+
+    public String FillBitZero(String text){ // Fill 0
+        String _result = "";
+
+        for(int i = 0; i < 16 - text.length(); i++){
+            _result += "0";
+        }
+        _result += text;
+
+        return _result;
+    }
+
+    private int ComplementOne(int value){ // 1's complement
+        int _result = 0;
+        _result = value ^ 65535; // 65535 == 1111 1111 1111 1111
+        return  _result;
+    }
+
+    private int SumBits(LinkedList<Integer> list){ // sum the bits in the list
         int _result = 0;
         for(int bit : list){
             _result += bit;
@@ -98,24 +94,29 @@ public class CheckSum {
         return _result;
     }
 
-    private int ComplementOne(int value){ // 1's complement
-        int _result = 0;
-        _result = value ^ 65535; // 65535 == 1111 1111 1111 1111
-        return  _result;
-    }
+    private int Change8Bit(int value){ // Add parity bytes to 7 bits
+        int _result;
+        _result  = value << 1;
 
-    public int CalculateCheckSum(List<Integer> list){
-        return ComplementOne(SumBits(list));
-    }
-
-    public String FillBitZero(String text){ // Fill 0
-        String _result = "";
-
-        for(int i = 0; i < 16 - text.length(); i++){
-            _result += "0";
+        if(CountOneBit(value) % 2 != 0){
+            _result += 1;
         }
-        _result += text;
-
         return _result;
     }
+
+    private int CountOneBit(int value){ // count 1 bit
+        int i;
+        for(i = 0; value != 0; i++){
+            value &= (value - 1);
+        }
+        Integer.toBinaryString(1);
+        return i;
+    }
+
+    private int MergeTo16Bit(int value1, int value2){ // merge two 8bit
+        int _result = 0;
+        _result = (value1 << 8) + value2;
+        return _result;
+    }
+
 }
