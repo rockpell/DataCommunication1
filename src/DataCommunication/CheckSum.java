@@ -3,12 +3,6 @@ package DataCommunication;
 import java.io.*;
 import java.util.LinkedList;
 
-// https://kutar37.tistory.com/29
-// http://kylog.tistory.com/6
-// http://www.ktword.co.kr/abbr_view.php?m_temp1=1477
-// http://mwultong.blogspot.com/2006/09/java-10-2binary.html
-// http://mwultong.blogspot.com/2006/10/java-text-file-write.html
-
 public class CheckSum {
     public static void main(String[] args){
 
@@ -24,33 +18,37 @@ public class CheckSum {
 
             _line = bufferedReader.readLine();
 
+            System.out.println("input : " + _line);
+
             char[] _charArray = _line.toCharArray();
 
-            checkSum.InputBitsToList(bitList, _charArray);
+            if(checkSum.InputBitsToList(bitList, _charArray)){
+                int _result = checkSum.CalculateCheckSum(bitList);
+                String _output = "";
 
-            for (int i : bitList) {
-                System.out.println(i);
+                System.out.println("Before Binary : " + _result);
+                _output = checkSum.FillBitZero(Integer.toBinaryString(_result));
+                System.out.println("output : " + _output);
+
+                BufferedWriter out = new BufferedWriter(new FileWriter("output_checksum.txt"));
+                out.write(_output);
+
+                out.close();
             }
-
-            int _result = checkSum.CalculateCheckSum(bitList);
-            String _output = "";
-
-            System.out.println("Before Binary : " + _result);
-            _output = checkSum.FillBitZero(Integer.toBinaryString(_result));
-            System.out.println(_output);
-
-            BufferedWriter out = new BufferedWriter(new FileWriter("output_checksum.txt"));
-            out.write(_output);
-
-            out.close();
         }catch (IOException e){
             System.out.println(e);
         }
     }
 
-    public void InputBitsToList(LinkedList<Integer> list, char[] chars){ // input the bits in ther list
-        for(int i = 0; i < chars.length; i += 2){
-            list.add(MergeTo16Bit(Change8Bit((int)chars[i]), Change8Bit((int)chars[i + 1])) );
+    public boolean InputBitsToList(LinkedList<Integer> list, char[] chars){ // input the bits in ther list
+        if(chars.length % 2 == 0){
+            for(int i = 0; i < chars.length; i += 2){
+                list.add(MergeTo16Bit(Change8Bit((int)chars[i]), Change8Bit((int)chars[i + 1])) );
+            }
+            return true;
+        } else {
+            System.out.println("There is not enough data. Please enter in 16-bit units");
+            return false;
         }
     }
 
