@@ -29,7 +29,7 @@ public class CRC {
 
             System.out.println("output : " + _crcResult);
 
-            BufferedWriter out = new BufferedWriter(new FileWriter("output_crc.txt"));
+            BufferedWriter out = new BufferedWriter(new FileWriter("src/output_crc.txt"));
             out.write(_crcResult);
 
             out.close();

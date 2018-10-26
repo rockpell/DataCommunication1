@@ -28,9 +28,10 @@ public class CheckSum {
 
                 System.out.println("Before Binary : " + _result);
                 _output = checkSum.FillBitZero(Integer.toBinaryString(_result));
+//                _output = Integer.toBinaryString(_result);
                 System.out.println("output : " + _output);
 
-                BufferedWriter out = new BufferedWriter(new FileWriter("output_checksum.txt"));
+                BufferedWriter out = new BufferedWriter(new FileWriter("src/output_checksum.txt"));
                 out.write(_output);
 
                 out.close();
