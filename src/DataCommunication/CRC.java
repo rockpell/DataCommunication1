@@ -27,6 +27,8 @@ public class CRC {
 
             String _crcResult = crc.ChangeBitListToString(linkedList);
 
+            _crcResult = crc.FillBitZero(_crcResult);
+
             System.out.println("output : " + _crcResult);
 
             BufferedWriter out = new BufferedWriter(new FileWriter("src/output_crc.txt"));
@@ -75,6 +77,17 @@ public class CRC {
             if(b) _result += "1";
             else _result += "0";
         }
+
+        return _result;
+    }
+
+    public String FillBitZero(String text){ // Fill 0
+        String _result = "";
+
+        for(int i = 0; i < 16 - text.length(); i++){
+            _result += "0";
+        }
+        _result += text;
 
         return _result;
     }
