@@ -35,6 +35,11 @@ public class CheckSum {
                 out.write(_output);
 
                 out.close();
+            } else {
+                BufferedWriter out = new BufferedWriter(new FileWriter("./src/output_checksum.txt"));
+                out.write("There is not enough data. Please enter in 16-bit units");
+
+                out.close();
             }
         }catch (IOException e){
             System.out.println(e);
